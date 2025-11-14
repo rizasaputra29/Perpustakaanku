@@ -16,4 +16,4 @@ export interface Book {
   synopsis: string;
 }
 
-export type Page = 'landing' | 'home' | 'detail' | 'profile' | 'about';
+export type Page = 'landing' | 'home' | 'detail' | 'profile' | 'about' | 'favorites';

@@ -1,132 +1,90 @@
-import { BookOpen, Bookmark, Zap } from 'lucide-react';
+import { books } from '../data/books';
+import { Page } from '../types';
 
 interface LandingProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: Page) => void; 
 }
 
+// Ambil 7 buku, kita akan pakai semua datanya
+const featuredBooks = books.slice(0, 7);
+
 export default function Landing({ onNavigate }: LandingProps) {
+  // Pastikan kita punya 7 buku sebelum mencoba merendernya
+  if (featuredBooks.length < 7) {
+    return (
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
+        Error: Data buku tidak cukup untuk menampilkan desain.
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="mb-8">
-                <BookOpen className="w-16 h-16 mb-4" />
-                <h1 className="text-6xl font-light tracking-wider mb-4">
-                  PERPUSTAKAAN
-                </h1>
-                <p className="text-xl text-gray-400 tracking-wide">
-                  Koleksi literatur terbaik dunia
-                </p>
-              </div>
+    <div className="min-h-screen bg-white text-black relative overflow-hidden">
 
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                Jelajahi dunia buku dengan koleksi perpustakaan pribadi kami. Setiap
-                buku dipilih dengan cermat untuk menghadirkan cerita yang menginspirasi,
-                menghibur, dan mendidik.
-              </p>
-
-              <div className="space-y-4 mb-12">
-                <div className="flex items-start space-x-4">
-                  <Bookmark className="w-6 h-6 text-gray-400 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-medium text-lg mb-1">Koleksi Lengkap</h3>
-                    <p className="text-gray-400">
-                      8+ buku klasik dari berbagai genre dan penulis terkenal
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <Zap className="w-6 h-6 text-gray-400 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-medium text-lg mb-1">Akses Offline</h3>
-                    <p className="text-gray-400">
-                      Aplikasi PWA yang dapat diakses kapan saja, bahkan tanpa internet
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onNavigate('home')}
-                className="bg-white text-black px-8 py-3 font-medium tracking-wide hover:bg-gray-100 transition-colors"
-              >
-                JELAJAHI KOLEKSI
-              </button>
-            </div>
-
-            <div className="hidden md:block">
-              <div className="bg-gray-900 aspect-square flex items-center justify-center border border-gray-800">
-                <div className="text-center">
-                  <BookOpen className="w-32 h-32 text-gray-700 mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg tracking-wide">
-                    Koleksi Buku Istimewa
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="absolute inset-0 z-0 opacity-90">
+        {/* Top-Left - Book with circular design (index 0) */}
+        <img
+          src={featuredBooks[0].cover}
+          className="absolute w-32 top-[8%] left-[8%] transform -rotate-[12deg] shadow-2xl 
+                     md:w-56 md:top-[10%] md:left-[6%] lg:top-[12%] rounded-xl"
+          alt={featuredBooks[0].title}
+        />
+        
+        {/* Top-Right - Nike/OFF book (index 1) */}
+        <img
+          src={featuredBooks[1].cover}
+          className="absolute w-32 top-[8%] right-[6%] transform rotate-[8deg] shadow-2xl 
+                     md:w-56 md:top-[8%] md:right-[6%] lg:top-[12%] rounded-xl"
+          alt={featuredBooks[1].title}
+        />
+        
+        
+        {/* Bottom-Left - Pink book (index 4) */}
+        <img
+          src={featuredBooks[4].cover}
+          className="absolute w-32 bottom-[8%] left-[10%] transform rotate-[5deg] shadow-2xl 
+                     md:w-56 md:bottom-[-1%] md:left-[10%] lg:bottom-[-5%] rounded-xl"
+          alt={featuredBooks[4].title}
+        />
+        
+        {/* Bottom-Center - HOW TO book (index 5) */}
+        <img
+          src={featuredBooks[5].cover}
+          className="absolute w-36 bottom-[10%] left-1/2 transform -translate-x-1/2 rotate-[3deg] shadow-2xl 
+                     md:w-60 md:bottom-[2%] lg:bottom-[-8%] rounded-xl"
+          alt={featuredBooks[5].title}
+        />
+        
+        {/* Bottom-Right - Yellow/Designing Brand book (index 6) */}
+        <img
+          src={featuredBooks[6].cover}
+          className="absolute w-32 bottom-[8%] right-[8%] transform -rotate-[8deg] shadow-2xl 
+                     md:w-56 md:bottom-[-2%] md:right-[10%] lg:bottom-[-5%] rounded-xl"
+          alt={featuredBooks[6].title}
+        />
       </div>
 
-      <div className="bg-gray-950 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-sm font-medium tracking-widest mb-3 text-gray-400">
-                TENTANG KAMI
-              </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
-                Perpustakaan Pribadi adalah platform modern untuk menikmati koleksi
-                buku terbaik. Dirancang dengan desain minimalis untuk pengalaman membaca
-                yang fokus dan nyaman.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium tracking-widest mb-3 text-gray-400">
-                FITUR
-              </h3>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>Detail Buku Lengkap</li>
-                <li>Harga dan Spesifikasi</li>
-                <li>Sinopsis Mendalam</li>
-                <li>Akses Offline</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium tracking-widest mb-3 text-gray-400">
-                NAVIGASI
-              </h3>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <button
-                    onClick={() => onNavigate('home')}
-                    className="hover:text-white transition-colors"
-                  >
-                    Koleksi
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => onNavigate('about')}
-                    className="hover:text-white transition-colors"
-                  >
-                    Tentang
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => onNavigate('profile')}
-                    className="hover:text-white transition-colors"
-                  >
-                    Profil
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      {/* 3. Konten Utama (Tengah) */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center text-center p-4 mb-10">
+        {/* Ukuran font juga dibuat responsif */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 max-w-2xl leading-tight">
+          One Stop Digital
+          <span className="inline-flex items-center mx-2">
+            Library
+          </span>
+          for Creatives.
+        </h1>
+
+        <p className="text-lg md:text-xl text-black mb-4 max-w-lg">
+          Digital library of books chosen by creatives for creatives.
+        </p>
+
+        <button
+          onClick={() => onNavigate('home')}
+          className="bg-black rounded-xl text-white px-8 py-3 font-medium tracking-wide hover:bg-gray-800 transition-colors"
+        >
+          View Collections
+        </button>
       </div>
     </div>
   );
