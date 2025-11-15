@@ -14,6 +14,7 @@ export interface Book {
   format: string;
   dimensions: string;
   synopsis: string;
+  purchaseUrl: string;
 }
 
 export type Page = 'landing' | 'home' | 'detail' | 'profile' | 'about' | 'favorites';

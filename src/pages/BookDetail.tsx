@@ -15,6 +15,11 @@ export default function BookDetail({ book, onBack }: BookDetailProps) {
     }).format(price);
   };
 
+  // --- MODIFIKASI ---
+  // Kita tidak perlu membuat const 'searchQuery' atau 'ecommerceUrl' lagi,
+  // karena URL-nya sudah tersedia di 'book.purchaseUrl'.
+  // --- AKHIR MODIFIKASI ---
+
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Container dengan padding vertikal lebih besar */}
@@ -30,12 +35,10 @@ export default function BookDetail({ book, onBack }: BookDetailProps) {
         </button>
 
         {/* --- GRID UTAMA (GAMBAR & INFO) --- */}
-        {/* Tambahkan gap lebih besar untuk whitespace */}
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 mb-16">
           
           {/* --- KOLOM KIRI (GAMBAR & TOMBOL) --- */}
           <div>
-            {/* Tambah rounded & shadow agar konsisten dengan BookCard */}
             <div className="aspect-[3/4] bg-gray-100 overflow-hidden mb-6 rounded-lg shadow-lg">
               <img
                 src={book.cover}
@@ -43,30 +46,36 @@ export default function BookDetail({ book, onBack }: BookDetailProps) {
                 className="w-full h-full object-cover"
               />
             </div>
-            <button className="w-full bg-black text-white py-4 font-medium tracking-wide
-                               hover:bg-gray-800 transition-colors rounded-lg text-base">
+            
+            {/* --- MODIFIKASI --- */}
+            {/* Ganti 'href' untuk menggunakan properti baru dari 'book' */}
+            <a
+              href={book.purchaseUrl} // <-- DIUBAH DI SINI
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="block w-full bg-black text-white py-4 font-medium tracking-wide
+                               hover:bg-gray-800 transition-colors rounded-lg text-base text-center"
+            >
               BELI SEKARANG
-            </button>
+            </a>
+            {/* --- AKHIR MODIFIKASI --- */}
+
           </div>
 
           {/* --- KOLOM KANAN (INFO) --- */}
           <div className="flex flex-col"> 
             
-            {/* Kategori (Dibuat lebih modern) */}
             <div className="inline-block px-4 py-1 bg-gray-100 text-gray-800 text-sm 
                             font-medium tracking-wide mb-5 self-start rounded-full">
               {book.category}
             </div>
 
-            {/* Judul, Author, Harga (Hierarki Jelas) */}
             <h1 className="text-4xl sm:text-5xl font-bold mb-3 tracking-tight">{book.title}</h1>
             <p className="text-2xl text-gray-600 mb-8">{book.author}</p>
             <div className="mb-8 pb-8 border-b border-gray-200">
               <p className="text-5xl font-bold tracking-tight">{formatPrice(book.price)}</p>
             </div>
 
-            {/* --- Daftar Detail (Dibuat Ulang) --- */}
-            {/* Menggunakan grid 2 kolom agar rapi, menghapus ikon yang ramai */}
             <h3 className="text-sm font-medium tracking-wider text-gray-500 uppercase mb-4">
               Detail Buku
             </h3>
