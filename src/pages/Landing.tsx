@@ -90,7 +90,7 @@ export default function Landing({ onNavigate }: LandingProps) {
         const heroHeight = window.innerHeight;
         const titleHeight = titleRef.current?.offsetHeight || 0;
         // (Tinggi Layar / 2) - (Setengah Tinggi Judul) - (Jarak dari atas)
-        return -(heroHeight / 2 - titleHeight / 2 - 120); // 80px dari atas
+        return -(heroHeight / 2 - titleHeight / 2 - 140); // 80px dari atas
       },
       scale: 0.8, // Sedikit mengecil
       ease: "power1.inOut",
@@ -160,15 +160,21 @@ export default function Landing({ onNavigate }: LandingProps) {
         {/* Hero Content Container - Centered Vertically */}
         <div className="relative z-40 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center min-h-screen">
           {/* Kontainer untuk Judul, diposisikan di tengah */}
-          <div className="w-full flex ">
+          <div className="w-full block ">
             <h1
               ref={titleRef}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-center max-w-2xl"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight max-w-2xl"
             >
               One Stop Digital
               <span className="block mt-1">Library</span>
               <span className="block mt-1">for Creatives.</span>
             </h1>
+            <p 
+              ref={descRef}
+              className="block mt-4 text-gray-700 text-lg sm:text-xl md:text-2xl font-medium"
+            >
+              Scroll Down.
+            </p>
           </div>
         </div>
 
