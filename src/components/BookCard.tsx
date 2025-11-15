@@ -30,7 +30,7 @@ export default function BookCard({ book, onClick, isFavorite, onToggleFavorite }
       >
         <Heart
           className={`w-5 h-5 transition-all ${
-            isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-700 hover:text-red-500'
+            isFavorite ? 'text-red-600 fill-red-600' : 'text-gray-700 hover:text-red-600'
           }`}
         />
       </button>
@@ -45,7 +45,7 @@ export default function BookCard({ book, onClick, isFavorite, onToggleFavorite }
           />
         </div>
         <div className="p-4">
-          <h3 className="font-medium text-base mb-1 line-clamp-2 text-black transition-colors group-hover:text-orange-600">
+          <h3 className="font-medium text-base mb-1 line-clamp-2 text-black transition-colors group-hover:text-red-600">
             {book.title}
           </h3>
           <p className="text-sm text-gray-500 mb-2">{book.author}</p>

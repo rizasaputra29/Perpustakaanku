@@ -79,7 +79,7 @@ export const books: Book[] = [
     author: 'J.D. Salinger',
     year: 1951,
     // Sampul ikonik yang valid
-    cover: 'https://m.media-amazon.com/images/I/7108sdEUEGL._SY522_.jpg',
+    cover: 'https://m.media-amazon.com/images/I/7108sdEUEGL.jpg',
     description: 'A novel exploring alienation and teenage angst in New York.',
     category: 'Classic Literature', // Tetap
     pages: 277, // Tetap
