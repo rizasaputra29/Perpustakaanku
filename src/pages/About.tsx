@@ -6,12 +6,14 @@ import {
   Search,
   Heart,
   UserCheck,
+  Server, // Ikon baru
+  Database, // Ikon baru
+  Cloud, // Ikon baru
 } from 'lucide-react';
 
 export default function About() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Container yang lebih sempit untuk keterbacaan, font Onest otomatis diterapkan */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
@@ -29,14 +31,14 @@ export default function About() {
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Perpustakaan Pribadi</h2>
           </div>
           <p className="text-base md:text-lg text-gray-300 leading-relaxed">
-            Platform PWA modern yang menghadirkan pengalaman membaca digital yang
-            elegan dan fungsional. Dengan koleksi buku pilihan, Perpustakaan
-            Pribadi menjadi ruang digital yang dipersonalisasi untuk
-            mengeksplorasi dunia literatur Anda.
+            Platform PWA full-stack modern yang menghadirkan pengalaman membaca
+            digital yang elegan dan fungsional. Aplikasi ini terhubung ke API
+            kustom yang menyimpan data pengguna, favorit, dan profil secara
+            persisten di dalam database cloud.
           </p>
         </div>
 
-        {/* --- FITUR UTAMA BARU --- */}
+        {/* --- FITUR UTAMA (Diperbarui) --- */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold tracking-tight mb-6">Fitur Utama</h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -49,22 +51,22 @@ export default function About() {
                 langsung dari header.
               </p>
             </div>
-            {/* Fitur 2: Favorit */}
+            {/* Fitur 2: Favorit (Diperbarui) */}
             <div className="border border-gray-200 p-6 rounded-lg">
               <Heart className="w-8 h-8 mb-4 text-black" />
               <h3 className="text-lg font-medium mb-2">Koleksi Favorit</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Tandai buku yang Anda sukai dan lihat semuanya dalam
-                halaman favorit khusus.
+                Tandai buku yang Anda sukai dan lihat di halaman favorit.
+                Pilihan Anda disimpan di database.
               </p>
             </div>
-            {/* Fitur 3: Profil */}
+            {/* Fitur 3: Profil (Diperbarui) */}
             <div className="border border-gray-200 p-6 rounded-lg">
               <UserCheck className="w-8 h-8 mb-4 text-black" />
-              <h3 className="text-lg font-medium mb-2">Profil Interaktif</h3>
+              <h3 className="text-lg font-medium mb-2">Profil Cloud</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Edit informasi profil Anda dan unggah foto pribadi yang
-                tersimpan di peramban Anda.
+                Edit info profil dan unggah foto pribadi Anda ke Cloudinary,
+                dengan data tersimpan aman di database.
               </p>
             </div>
           </div>
@@ -90,21 +92,22 @@ export default function About() {
                 dari smartphone hingga desktop, untuk pengalaman optimal.
               </p>
             </div>
+            {/* Diperbarui */}
             <div className="border border-gray-200 p-6 rounded-lg">
-              <BookOpen className="w-8 h-8 mb-4 text-black" />
-              <h3 className="text-lg font-medium mb-2">Koleksi Berkualitas</h3>
+              <Server className="w-8 h-8 mb-4 text-black" />
+              <h3 className="text-lg font-medium mb-2">API Kustom</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Setiap buku dipilih dengan cermat dengan informasi detail
-                termasuk sinopsis mendalam dan spesifikasi.
+                Dibangun dengan backend Express.js kustom untuk menangani
+                logika bisnis, data pengguna, dan integrasi layanan cloud.
               </p>
             </div>
-            {/* Diperbarui dari "Data Statis" */}
+            {/* Diperbarui */}
             <div className="border border-gray-200 p-6 rounded-lg">
-              <Lock className="w-8 h-8 mb-4 text-black" />
-              <h3 className="text-lg font-medium mb-2">Data Tersimpan Lokal</h3>
+              <Database className="w-8 h-8 mb-4 text-black" />
+              <h3 className="text-lg font-medium mb-2">Database Serverless</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Profil dan favorit Anda disimpan dengan aman di peramban
-                menggunakan localStorage, tanpa server eksternal.
+                Menggunakan Neon sebagai database PostgreSQL serverless
+                yang terkelola, memastikan data selalu tersedia dan aman.
               </p>
             </div>
           </div>
@@ -112,38 +115,46 @@ export default function About() {
 
         {/* --- Teknologi (Diperbarui) --- */}
         <div className="border-t border-gray-200 pt-8">
-          <h2 className="text-2xl font-bold tracking-tight mb-4">Teknologi</h2>
+          <h2 className="text-2xl font-bold tracking-tight mb-4">Tumpukan Teknologi (Tech Stack)</h2>
           <p className="text-gray-600 mb-6">
-            Aplikasi ini dibangun menggunakan teknologi modern dan terbaik:
+            Aplikasi ini dibangun menggunakan arsitektur full-stack modern:
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
-              <span>React 18</span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span>React 18 & Vite</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               <span>TypeScript</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               <span>Tailwind CSS</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
-              <span>Vite</span>
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span>Node.js</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
-              <span>Service Workers (PWA)</span>
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span>Express.js</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
-              <span>Lucide React (Icons)</span>
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span>PostgreSQL (Neon)</span>
             </div>
             <div className="flex items-center space-x-3">
-              <span className="w-2 h-2 bg-black rounded-full"></span>
-              <span>localStorage</span>
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span>Cloudinary</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span>GSAP (Animasi)</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+              <span>Vercel (Deployment)</span>
             </div>
           </div>
         </div>

@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { BookOpen, Menu, X, Search } from 'lucide-react'; // Impor Heart
+import { BookOpen, Search, User } from 'lucide-react'; // Impor User
 import { Page } from '../types';
 
 interface HeaderProps {
   currentPage: Page;
   onNavigate: (page: Page) => void;
   onSearch: (query: string) => void;
+  profilePicUrl: string | null; // Prop baru
 }
 
-export default function Header({ currentPage, onNavigate, onSearch }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function Header({ currentPage, onNavigate, onSearch, profilePicUrl }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const isActive = (page: Page | Page[]) => {
@@ -17,11 +17,6 @@ export default function Header({ currentPage, onNavigate, onSearch }: HeaderProp
       return page.includes(currentPage);
     }
     return currentPage === page;
-  };
-
-  const handleMobileNavigate = (page: Page) => {
-    onNavigate(page);
-    setIsMenuOpen(false);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +51,6 @@ export default function Header({ currentPage, onNavigate, onSearch }: HeaderProp
             >
               Koleksi
             </button>
-            {/* --- TOMBOL FAVORIT BARU --- */}
             <button
               onClick={() => onNavigate('favorites')}
               className={`px-6 py-2 text-sm font-medium tracking-wide transition-colors border-r border-gray-200 ${
@@ -80,99 +74,37 @@ export default function Header({ currentPage, onNavigate, onSearch }: HeaderProp
           </nav>
 
           {/* === Actions - Kanan === */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="flex items-center space-x-4"> {/* Ubah space-x-6 jadi 4 */}
             <div className="relative">
               <input
                 type="text"
                 placeholder="Cari buku..."
-                className="border border-gray-300 rounded-full py-2 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-black transition-all w-48"
+                className="border border-gray-300 rounded-full py-2 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-black transition-all w-full md:w-48"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
             
-            <div className="h-6 w-px bg-gray-200"></div>
+            <div className="h-6 w-px bg-gray-200 hidden md:block"></div>
             
+            {/* === TOMBOL PROFIL BARU DENGAN GAMBAR === */}
             <button
               onClick={() => onNavigate('profile')}
-              className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+              className="hidden md:block rounded-full w-10 h-10 bg-gray-200 hover:opacity-80 transition-opacity"
             >
-              Profil
-            </button>
-          </div>
-
-          {/* === Tombol Hamburger (Menu HP) === */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-              className="text-black hover:opacity-70 transition-opacity"
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
+              {profilePicUrl ? (
+                <img 
+                  src={profilePicUrl} 
+                  alt="Profil" 
+                  className="w-full h-full rounded-full object-cover" 
+                />
               ) : (
-                <Menu className="w-6 h-6" />
+                <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
+                  <User className="w-5 h-5 text-white" />
+                </div>
               )}
             </button>
-          </div>
-        </div>
-      </div>
-
-      {/* === Menu Dropdown HP === */}
-      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} bg-white border-t border-gray-200`}>
-        <div className="px-4 pt-4 pb-6 space-y-3">
-          <button
-            onClick={() => handleMobileNavigate('home')}
-            className={`block w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
-              isActive(['home', 'detail'])
-                ? 'bg-gray-100 text-black'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-black'
-            }`}
-          >
-            Koleksi
-          </button>
-          {/* --- TOMBOL FAVORIT BARU (MOBILE) --- */}
-          <button
-            onClick={() => handleMobileNavigate('favorites')}
-            className={`flex items-center space-x-2 w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
-              isActive('favorites')
-                ? 'bg-gray-100 text-black'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-black'
-            }`}
-          >
-            <span>Favorit</span>
-          </button>
-          <button
-            onClick={() => handleMobileNavigate('about')}
-            className={`block w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
-              isActive('about')
-                ? 'bg-gray-100 text-black'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-black'
-            }`}
-          >
-            Tentang
-          </button>
-          <button
-            onClick={() => handleMobileNavigate('profile')}
-            className={`flex items-center space-x-2 w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
-              isActive('profile')
-                ? 'bg-gray-100 text-black'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-black'
-            }`}
-          >
-            <span>Profil</span>
-          </button>
-          
-          <div className="relative pt-2">
-            <input
-              type="text"
-              placeholder="Cari buku..."
-              className="border border-gray-300 rounded-lg w-full py-3 px-4 pl-10 text-base focus:outline-none focus:ring-2 focus:ring-black"
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-            <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
           </div>
 
         </div>

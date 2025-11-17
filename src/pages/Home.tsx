@@ -4,12 +4,26 @@ import BookCard from '../components/BookCard';
 interface HomeProps {
   books: Book[];
   onBookClick: (bookId: string) => void;
-  // Prop baru untuk fitur favorit
   favoriteIDs: string[];
   onToggleFavorite: (bookId: string) => void;
+  isLoading: boolean; // Prop baru
 }
 
-export default function Home({ books, onBookClick, favoriteIDs, onToggleFavorite }: HomeProps) {
+export default function Home({ books, onBookClick, favoriteIDs, onToggleFavorite, isLoading }: HomeProps) {
+  
+  // Tampilkan pesan loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center py-20">
+            <h2 className="text-xl font-medium">Memuat koleksi buku...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -18,14 +32,12 @@ export default function Home({ books, onBookClick, favoriteIDs, onToggleFavorite
             Koleksi Buku
           </h1>
           <p className="text-lg text-gray-600">
-            {/* Tampilkan pesan berbeda jika sedang mencari */}
             {books.length > 0
               ? `Menampilkan ${books.length} buku`
               : 'Tidak ada buku yang cocok dengan pencarian Anda.'}
           </p>
         </div>
 
-        {/* Tampilkan buku jika ada, jika tidak, jangan tampilkan grid */}
         {books.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             {books.map((book) => (
@@ -33,7 +45,6 @@ export default function Home({ books, onBookClick, favoriteIDs, onToggleFavorite
                 key={book.id}
                 book={book}
                 onClick={() => onBookClick(book.id)}
-                // Teruskan prop favorit
                 isFavorite={favoriteIDs.includes(book.id)}
                 onToggleFavorite={onToggleFavorite}
               />

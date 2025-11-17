@@ -18,3 +18,13 @@ export interface Book {
 }
 
 export type Page = 'landing' | 'home' | 'detail' | 'profile' | 'about' | 'favorites';
+
+// TAMBAHAN BARU
+export interface UserProfile {
+  id: string;
+  name: string;
+  nim: string;
+  group: string;
+  email: string;
+  profilepicurl: string | null; // PostgreSQL mengembalikan nama kolom lowercase
+}

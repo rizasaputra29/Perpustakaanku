@@ -7,9 +7,24 @@ interface FavoritesProps {
   onBookClick: (bookId: string) => void;
   favoriteIDs: string[];
   onToggleFavorite: (bookId: string) => void;
+  isLoading: boolean; // Prop baru
 }
 
-export default function Favorites({ books, onBookClick, favoriteIDs, onToggleFavorite }: FavoritesProps) {
+export default function Favorites({ books, onBookClick, favoriteIDs, onToggleFavorite, isLoading }: FavoritesProps) {
+  
+  // Tampilkan pesan loading jika data buku belum siap
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center py-20">
+            <h2 className="text-xl font-medium">Memuat buku favorit...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -18,6 +33,7 @@ export default function Favorites({ books, onBookClick, favoriteIDs, onToggleFav
             Buku Favorit Anda
           </h1>
           <p className="text-lg text-gray-600">
+            {/* Logika ini masih valid, karena 'books' di sini adalah favoriteBooks yang sudah difilter */}
             {books.length > 0
               ? `Anda memiliki ${books.length} buku favorit.`
               : 'Anda belum menambahkan buku favorit.'}

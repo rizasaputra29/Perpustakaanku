@@ -1,16 +1,25 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa'; // <-- 1. Impor plugin
+import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // TAMBAHKAN BLOK 'server' INI
+  server: {
+    proxy: {
+      // Arahkan request /api ke server backend Anda
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   plugins: [
     react(),
-    // 2. Tambahkan plugin PWA
     VitePWA({
-      registerType: 'autoUpdate', // Otomatis update service worker
+      registerType: 'autoUpdate',
       injectRegister: 'auto',
-      // 'manifest' akan dibaca dari public/manifest.json
       manifest: {
         name: 'Perpustakaan Pribadi',
         short_name: 'MyLibrary',
@@ -29,7 +38,6 @@ export default defineConfig({
           },
         ],
       },
-      // 'workbox' akan men-cache semua file di folder 'dist'
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,jpg,svg}'],
       },

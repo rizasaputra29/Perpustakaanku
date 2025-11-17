@@ -1,30 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
-import { User, Mail, Hash, Users, Edit, Save, Upload } from 'lucide-react';
+import { User, Mail, Hash, Users, Edit, Save, Upload, Loader2 } from 'lucide-react';
+import { UserProfile } from '../types'; // Impor tipe UserProfile
+
+// (Data default dan kunci localStorage dihapus)
 
 // Tipe untuk data formulir
-interface ProfileData {
+interface ProfileFormData {
   name: string;
   nim: string;
   group: string;
   email: string;
 }
 
-// Data default
-const defaultData: ProfileData = {
-  name: 'Rezvanda Bagas Saputra',
-  nim: '21120123130103',
-  group: 'Kelompok 42',
-  email: 'rezvandabs@students.undip.ac.id',
-};
-
-// Kunci untuk localStorage
-const PROFILE_KEY = 'userProfile';
-const PROFILE_PIC_KEY = 'userProfilePic';
-
-// --- (PERBAIKAN 1) ---
 // Tipe untuk props ProfileInput
 interface ProfileInputProps {
-  name: keyof ProfileData;
+  name: keyof ProfileFormData; // Sesuaikan dengan tipe
   label: string;
   value: string;
   icon: React.ElementType;
@@ -32,9 +22,6 @@ interface ProfileInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-// --- (PERBAIKAN 2) ---
-// Komponen ProfileInput dipindahkan ke LUAR fungsi Profile
-// dan menerima props 'isEditing' & 'onChange'
 const ProfileInput = ({ name, label, value, icon: Icon, isEditing, onChange }: ProfileInputProps) => (
   <div className="pb-6 border-b border-gray-200">
     <label htmlFor={name} className="text-xs text-gray-500 uppercase tracking-wider mb-1">
@@ -55,26 +42,35 @@ const ProfileInput = ({ name, label, value, icon: Icon, isEditing, onChange }: P
   </div>
 );
 
+// Tipe untuk props halaman Profile
+interface ProfileProps {
+  userId: string;
+  initialProfile: UserProfile | null;
+  onProfileUpdate: (profile: UserProfile) => void; // Callback untuk update App.tsx
+}
 
-// --- Komponen Utama Profile ---
-export default function Profile() {
+export default function Profile({ userId, initialProfile, onProfileUpdate }: ProfileProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<ProfileData>(defaultData);
-  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [formData, setFormData] = useState<ProfileFormData>({
+    name: '', nim: '', group: '', email: ''
+  });
+  const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // State loading baru
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Muat data dari localStorage
+  // Muat data dari prop (yang didapat dari API di App.tsx)
   useEffect(() => {
-    const savedData = localStorage.getItem(PROFILE_KEY);
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
+    if (initialProfile) {
+      setFormData({
+        name: initialProfile.name,
+        nim: initialProfile.nim,
+        group: initialProfile.group, // Nama kolom di DB adalah 'group'
+        email: initialProfile.email,
+      });
+      setProfilePicUrl(initialProfile.profilepicurl);
     }
-    const savedPic = localStorage.getItem(PROFILE_PIC_KEY);
-    if (savedPic) {
-      setProfilePic(savedPic);
-    }
-  }, []);
+  }, [initialProfile]);
 
   // Handler untuk perubahan input teks
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,28 +81,74 @@ export default function Profile() {
     }));
   };
 
-  // Handler untuk menyimpan perubahan
-  const handleSave = () => {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(formData));
-    setIsEditing(false);
-    if (profilePic) {
-      localStorage.setItem(PROFILE_PIC_KEY, profilePic);
+  // Handler untuk menyimpan perubahan (hanya teks)
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`/api/profile/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const updatedProfile: UserProfile = await response.json();
+      
+      // Update state lokal dan state di App.tsx
+      setFormData({ 
+        name: updatedProfile.name, 
+        nim: updatedProfile.nim, 
+        group: updatedProfile.group, 
+        email: updatedProfile.email 
+      });
+      onProfileUpdate(updatedProfile); // Kirim data lengkap ke App.tsx
+      setIsEditing(false);
+
+    } catch (error) {
+      console.error("Gagal menyimpan profil:", error);
     }
   };
 
   // Handler untuk membatalkan edit
   const handleCancel = () => {
-    const savedData = localStorage.getItem(PROFILE_KEY);
-    setFormData(savedData ? JSON.parse(savedData) : defaultData);
+    if (initialProfile) {
+      setFormData({
+        name: initialProfile.name,
+        nim: initialProfile.nim,
+        group: initialProfile.group,
+        email: initialProfile.email,
+      });
+    }
     setIsEditing(false);
   };
 
-  // Handler saat gambar dipilih
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handler saat gambar dipilih (UPLOAD LOGIC)
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const newPicUrl = URL.createObjectURL(file);
-      setProfilePic(newPicUrl);
+    if (!file) return;
+
+    setIsUploading(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append('profilePic', file);
+
+    try {
+      // Kirim file ke endpoint upload API kita
+      const response = await fetch(`/api/profile/${userId}/upload-pic`, {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload gagal');
+      }
+
+      const updatedProfile: UserProfile = await response.json();
+      
+      // Update state lokal dan state di App.tsx
+      setProfilePicUrl(updatedProfile.profilepicurl);
+      onProfileUpdate(updatedProfile); // Kirim data lengkap ke App.tsx
+
+    } catch (error) {
+      console.error("Gagal unggah gambar:", error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -114,8 +156,6 @@ export default function Profile() {
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
-
-  // (Definisi ProfileInput dihapus dari sini)
 
   return (
     <div className="min-h-screen bg-white">
@@ -158,10 +198,17 @@ export default function Profile() {
           <div className="flex flex-col items-center mb-8">
             <div className="relative w-32 h-32 rounded-full">
               <div className="w-32 h-32 bg-black rounded-full flex items-center justify-center overflow-hidden">
-                {profilePic ? (
-                  <img src={profilePic} alt="Profile" className="w-full h-full object-cover" />
+                {profilePicUrl ? (
+                  <img src={profilePicUrl} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                   <User className="w-16 h-16 text-white" />
+                )}
+
+                {/* Tampilkan overlay loading saat mengunggah */}
+                {isUploading && (
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-full">
+                    <Loader2 className="w-8 h-8 text-white animate-spin" />
+                  </div>
                 )}
               </div>
               
@@ -169,7 +216,8 @@ export default function Profile() {
                 <>
                   <button
                     onClick={handleUploadClick}
-                    className="absolute -bottom-2 -right-2 bg-white text-black p-3 rounded-full shadow-md border border-gray-200 hover:bg-gray-100 transition-colors"
+                    disabled={isUploading}
+                    className="absolute -bottom-2 -right-2 bg-white text-black p-3 rounded-full shadow-md border border-gray-200 hover:bg-gray-100 transition-colors disabled:opacity-50"
                   >
                     <Upload className="w-5 h-5" />
                   </button>
@@ -179,14 +227,13 @@ export default function Profile() {
                     onChange={handleImageChange}
                     accept="image/png, image/jpeg"
                     className="hidden"
+                    disabled={isUploading}
                   />
                 </>
               )}
             </div>
           </div>
 
-          {/* --- (PERBAIKAN 3) --- */}
-          {/* Teruskan props 'isEditing' dan 'onChange' ke komponen ProfileInput */}
           <div className="space-y-6 max-w-md mx-auto">
             <ProfileInput
               name="name"
