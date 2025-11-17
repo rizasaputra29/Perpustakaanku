@@ -1,6 +1,6 @@
 {
-  "name": "Perpustakaan Pribadi",
-  "short_name": "MyLibrary",
+  "name": "Lit.ly",
+  "short_name": "Lit.ly",
   "description": "Aplikasi PWA Perpustakaan Pribadi",
   "start_url": "/",
   "display": "standalone",
