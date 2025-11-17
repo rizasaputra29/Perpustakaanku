@@ -21,8 +21,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       manifest: {
-        name: 'Perpustakaan Pribadi',
-        short_name: 'MyLibrary',
+        name: 'Lit.ly',
+        short_name: 'Lit.ly',
         description: 'Aplikasi PWA Perpustakaan Pribadi',
         theme_color: '#000000',
         icons: [
